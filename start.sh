@@ -7,4 +7,4 @@ cd /home
 python main.py
 echo "End User App"
 
-tail -f /dev/null
+#tail -f /dev/null
