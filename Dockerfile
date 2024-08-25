@@ -1,23 +1,44 @@
-FROM python:3.12-alpine
+# First stage: Build dependencies in a full Python environment
+#FROM python:3.12-bookworm AS python-builder
+FROM python:3.12-alpine AS python-builder
 
-# Install required binaries/libs
-RUN apk update && apk add --no-cache mosquitto
+WORKDIR /home/
 
-# Install python libs
+# Install necessary packages for building the environment
+#RUN apt-get update && apt-get install -y git
+RUN apk add --no-cache git g++ make
+
+# Install Python dependencies into a specific directory
 COPY requirements.txt /home/
-RUN pip install -r /home/requirements.txt
+RUN pip install --no-cache-dir --target /home/python-packages/ -r requirements.txt
 
-# Copy files into the container
+# Second stage: Create a minimal runtime environment
+FROM python:3.12-alpine AS target
+#FROM ubuntu:24.04 AS target
+
+WORKDIR /home/
+
+# Copy the Python packages from the builder stage to the Alpine image
+COPY --from=python-builder /home/python-packages/ /home/python-packages/
+
+# (Optional) If the Python packages include compiled extensions, you might need to install some dependencies in Alpine:
+RUN apk add --no-cache mosquitto
+#RUN apt-get update && apt-get install -y mosquitto python3
+#RUN pip uninstall  grpcio
+#RUN pip install --target /home/python-packages/ grpcio 
+
+# Copy application files
 COPY start.sh /home/
 COPY main.py /home/
 
 # Set execute permission for the script
 RUN chmod +x /home/start.sh
 
-# Install the necessary Python packages
+# Make links
+RUN ln -s /home/python-packages/velocitas_sdk /home/python-packages/sdv
 
-# Set var env
-ENV PYTHONPATH=$PYTHONPATH:/home/vss/dk_system/lib/python3.12/site-packages/:/home/vss/vehicle_gen/
+# Set environment variables
+ENV PYTHONPATH=$PYTHONPATH:/home/vss/vehicle_gen/:/home/python-packages/
 ENV SDV_VEHICLEDATABROKER_ADDRESS="grpc://vehicledatabroker:55555"
 
 # Execute the script
