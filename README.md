@@ -54,8 +54,8 @@ docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker r
 ```
   
 This also can play a role as a base image. playground can only deploy app.py to dreamkit, and dreamkit can run a command to play the app within this base image. an app will run in their own instance.  
-This is a quick way to do the testing since we don't need to rebuild the image for new/updated app. But the app should have metadata (.json) to show that it only uses base image (no 3rd lib shall be used by pip install xxx).
-Option: "-v ~/.dk/test:/app/exec". The app folder on host (~/.dk/test) should be mounted to /app/exec folder in container. the script shall run the main.py in /app/exec/.  
+This is a quick way to do the testing since we don't need to rebuild the image for new/updated app. But the app should have metadata (.json) to show that it only uses base image (no 3rd lib shall be used by pip install xxx).  
+Option: ```-v ~/.dk/test:/app/exec```. The app folder on host (~/.dk/test) should be mounted to /app/exec folder in container. the script shall run the main.py in /app/exec/.  
 ```
 docker buildx build --platform linux/amd64,linux/arm64 -t phongbosch/dk_app_python_template:baseimage --push -f Dockerfile.PrebuiltSdk .
 #### for amd64
