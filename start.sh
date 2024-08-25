@@ -3,7 +3,7 @@
 echo "Start User App"
 # start local mqtt server
 mosquitto -d
-cd /home
+cd /app/exec
 python main.py
 echo "End User App"
 

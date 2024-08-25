@@ -52,3 +52,10 @@ docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker r
 #### for arm64
 docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network phongbosch/dk_app_python_template:mountsdk
 ```
+  
+This also can play a role as a base image. playground can only deploy app.py to dreamkit, and dreamkit can run a command to play the app within this base image. an app will run in their own instance.  
+This is a quick way to do the testing since we don't need to rebuild the image for new/updated app. But the app should have metadata (.json) to show that it only uses base image (no 3rd lib shall be used by pip install xxx).
+Option: "-v ~/.dk/test:/app/exec". The app folder on host (~/.dk/test) should be mounted to /app/exec folder in container. the script shall run the main.py in /app/exec/.  
+```
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v /home/developer/working/repos/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec dk_app_python_template:latest 
+```

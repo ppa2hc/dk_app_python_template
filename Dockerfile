@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y mosquitto python3 python-is-python3
 
 # Copy application files
 COPY start.sh /home/
-COPY main.py /home/
+COPY main.py /app/exec/
 
 # Set execute permission for the script
 RUN chmod +x /home/start.sh
