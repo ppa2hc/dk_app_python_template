@@ -1,12 +1,12 @@
 # First stage: Build dependencies in a full Python environment
-#FROM python:3.12-bookworm AS python-builder
-FROM python:3.12-alpine AS python-builder
+FROM python:3.12-bookworm AS python-builder
+#FROM python:3.12-alpine AS python-builder
 
 WORKDIR /home/
 
 # Install necessary packages for building the environment
-#RUN apt-get update && apt-get install -y git make
-RUN apk add --no-cache git g++ make
+RUN apt-get update && apt-get install -y git
+#RUN apk add --no-cache git g++ make
 
 # Install Python dependencies into a specific directory
 COPY sdk-requirements.txt /home/
@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir --target /home/python-packages/ -r sdk-requiremen
 RUN pip install --no-cache-dir --target /home/python-packages/ -r app-requirements.txt
 
 # Second stage: Create a minimal runtime environment
-FROM python:3.12-alpine AS target
-#FROM ubuntu:24.04 AS target
+#FROM python:3.12-alpine AS target
+FROM ubuntu:24.04 AS target
 
 WORKDIR /home/
 
@@ -24,8 +24,8 @@ WORKDIR /home/
 COPY --from=python-builder /home/python-packages/ /home/python-packages/
 
 # (Optional) If the Python packages include compiled extensions, you might need to install some dependencies in Alpine:
-RUN apk add --no-cache mosquitto
-#RUN apt-get update && apt-get install -y mosquitto python3
+#RUN apk add --no-cache mosquitto
+RUN apt-get update && apt-get install -y mosquitto python3 python-is-python3
 
 # Copy application files
 COPY start.sh /home/
