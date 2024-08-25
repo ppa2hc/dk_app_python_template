@@ -58,5 +58,8 @@ This is a quick way to do the testing since we don't need to rebuild the image f
 Option: "-v ~/.dk/test:/app/exec". The app folder on host (~/.dk/test) should be mounted to /app/exec folder in container. the script shall run the main.py in /app/exec/.  
 ```
 docker buildx build --platform linux/amd64,linux/arm64 -t phongbosch/dk_app_python_template:baseimage --push -f Dockerfile.PrebuiltSdk .
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v /home/developer/working/repos/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
+#### for amd64
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
+#### for arm64
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
 ```
