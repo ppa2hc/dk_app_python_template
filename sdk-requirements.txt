@@ -2,8 +2,8 @@
 #anytree==2.12.1 # vss-tools
 #deprecation==2.1.0 # vss-tools, cloudevents
 #graphql-core==3.2.3 # vss-tools
-#grpcio==1.66.0 # kuksa-client, mock-provider, velocitas-sdk
-grpcio
+grpcio==1.66.0 # kuksa-client, mock-provider, velocitas-sdk
+#grpcio
 #grpcio-tools==1.66.0 # kuksa-client
 #aiohttp==3.9.3 # kuksa-syncer
 #python-socketio==5.11.3 # kuksa-syncer

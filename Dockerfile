@@ -5,12 +5,14 @@ FROM python:3.12-alpine AS python-builder
 WORKDIR /home/
 
 # Install necessary packages for building the environment
-#RUN apt-get update && apt-get install -y git
+#RUN apt-get update && apt-get install -y git make
 RUN apk add --no-cache git g++ make
 
 # Install Python dependencies into a specific directory
-COPY requirements.txt /home/
-RUN pip install --no-cache-dir --target /home/python-packages/ -r requirements.txt
+COPY sdk-requirements.txt /home/
+COPY app-requirements.txt /home/
+RUN pip install --no-cache-dir --target /home/python-packages/ -r sdk-requirements.txt
+RUN pip install --no-cache-dir --target /home/python-packages/ -r app-requirements.txt
 
 # Second stage: Create a minimal runtime environment
 FROM python:3.12-alpine AS target
@@ -24,8 +26,6 @@ COPY --from=python-builder /home/python-packages/ /home/python-packages/
 # (Optional) If the Python packages include compiled extensions, you might need to install some dependencies in Alpine:
 RUN apk add --no-cache mosquitto
 #RUN apt-get update && apt-get install -y mosquitto python3
-#RUN pip uninstall  grpcio
-#RUN pip install --target /home/python-packages/ grpcio 
 
 # Copy application files
 COPY start.sh /home/

@@ -26,3 +26,6 @@ docker stop dk_app_python_template; docker rm dk_app_python_template;docker run 
 ```
 docker stop dk_app_python_template; docker rm dk_app_python_template;docker run -d -it --name dk_app_python_template -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro --network dk_network phongbosch/dk_app_python_template:latest
 ```
+
+## Notes
+This image build is based on python:3.12-bookworm. The template is a simple app which uses python default libs. If the app wants to use 3rd libs that can be extensibly installed by pip, 3rd libs should be put into app-requirements.txt before docker build.  
