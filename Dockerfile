@@ -25,7 +25,9 @@ COPY --from=python-builder /home/python-packages/ /home/python-packages/
 
 # (Optional) If the Python packages include compiled extensions, you might need to install some dependencies in Alpine:
 #RUN apk add --no-cache mosquitto
-RUN apt-get update && apt-get install -y mosquitto python3 python-is-python3
+RUN apt-get update && apt-get install -y mosquitto python3 python-is-python3 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copy application files
 COPY start.sh /home/

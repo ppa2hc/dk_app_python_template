@@ -13,9 +13,9 @@ WORKDIR /home/
 COPY app-requirements.txt /home/
 RUN pip install --no-cache-dir --target /app/python-packages/ -r app-requirements.txt
 
+
 # Second stage: Create a minimal runtime environment
 #FROM python:3.12-alpine AS target
-#FROM ubuntu:24.04 AS target
 FROM python:3.12-slim-bookworm AS target
 
 WORKDIR /home/
@@ -25,8 +25,9 @@ COPY --from=python-builder /app/python-packages/ /app/python-packages/
 
 # (Optional) If the Python packages include compiled extensions, you might need to install some dependencies in Alpine:
 #RUN apk add --no-cache mosquitto
-#RUN apt-get update && apt-get install -y mosquitto python3 python-is-python3
-RUN apt-get update && apt-get install -y mosquitto
+RUN apt-get update && apt-get install -y --no-install-recommends mosquitto \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copy application files
 COPY start.sh /home/
