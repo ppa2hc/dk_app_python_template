@@ -19,13 +19,13 @@ docker buildx build --platform linux/amd64,linux/arm64 -t phongbosch/dk_app_pyth
 
 ## Run local built docker container
 ```
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro --network dk_network dk_app_python_template:latest
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro --network dk_network dk_app_python_template:latest
 ```
 
 ## Run docker container from docker hub
 ```
 docker pull phongbosch/dk_app_python_template:latest
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro --network dk_network phongbosch/dk_app_python_template:latest
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro --network dk_network phongbosch/dk_app_python_template:latest
 ```
 
 ## Notes
@@ -36,9 +36,9 @@ Local build:
 ```
 docker build -t dk_app_python_template:latest --file Dockerfile.PrebuiltSdk .
 #### for amd64
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network  dk_app_python_template:latest
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network  dk_app_python_template:latest
 #### for arm64
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network  dk_app_python_template:latest
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network  dk_app_python_template:latest
 ```
 Multi-arch build and push to docker hub:    
 ```
@@ -48,9 +48,9 @@ docker buildx build --platform linux/amd64,linux/arm64 -t phongbosch/dk_app_pyth
 Run docker container from docker hub:  
 ```
 #### for amd64
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network phongbosch/dk_app_python_template:mountsdk
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network phongbosch/dk_app_python_template:mountsdk
 #### for arm64
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network phongbosch/dk_app_python_template:mountsdk
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network phongbosch/dk_app_python_template:mountsdk
 ```
   
 This also can play a role as a base image. playground can only deploy app.py to dreamkit, and dreamkit can run a command to play the app within this base image. An app will run in its own container to ensure security.  
@@ -59,7 +59,7 @@ Option: ```-v ~/.dk/test:/app/exec```. The app folder on host (~/.dk/test) shoul
 ```
 docker buildx build --platform linux/amd64,linux/arm64 -t phongbosch/dk_app_python_template:baseimage --push -f Dockerfile.PrebuiltSdk .
 #### for amd64
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/amd64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
 #### for arm64
-docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/generated/vss/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
+docker stop dk_app_python_template ; docker rm dk_app_python_template ; docker run -d -it --name dk_app_python_template --log-opt max-size=10m --log-opt max-file=3 -v ~/.dk/dk_vssgeneration/vehicle_gen/:/home/vss/vehicle_gen:ro -v ~/.dk/dk_app_python_template/target/arm64/python-packages:/home/python-packages:ro --network dk_network -v ~/.dk/test:/app/exec phongbosch/dk_app_python_template:baseimage
 ```
